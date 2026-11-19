@@ -136,6 +136,13 @@ class AddEditActivity : AppCompatActivity() {
         descriptionInput.setText(market.description)
         latInput.setText(market.lat.toString())
         lngInput.setText(market.lng.toString())
+
+        selectedImageUri = market.imageUri?.let { Uri.parse(it) }
+
+        if (selectedImageUri != null) {
+            marketImage.setImageURI(selectedImageUri)
+            photoButton.setText(R.string.change_photo)
+        }
     }
 
     private fun saveMarket() {
@@ -171,7 +178,8 @@ class AddEditActivity : AppCompatActivity() {
             openingHours = hoursInput.text.toString().trim(),
             description = descriptionInput.text.toString().trim(),
             lat = lat,
-            lng = lng
+            lng = lng,
+            imageUri = selectedImageUri?.toString()
         )
 
         if (editingId == -1L) {
