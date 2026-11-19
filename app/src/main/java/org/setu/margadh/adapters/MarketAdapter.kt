@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import org.setu.margadh.R
 import org.setu.margadh.models.MarketModel
 import timber.log.Timber
+import android.net.Uri
+import android.widget.ImageView
 class MarketAdapter(
     private var markets: List<MarketModel>,
     private val listener: OnMarketListener
@@ -21,6 +23,7 @@ class MarketAdapter(
         val detailsText: TextView = itemView.findViewById(R.id.detailsText)
         val descriptionText: TextView = itemView.findViewById(R.id.descriptionText)
         val coordinatesText: TextView = itemView.findViewById(R.id.coordinatesText)
+        val marketImage: ImageView = itemView.findViewById(R.id.marketImage)
 
     }
 
@@ -48,6 +51,13 @@ class MarketAdapter(
         holder.detailsText.text = context.getString(R.string.market_details_format, market.county, market.openingDays, market.openingHours)
         holder.descriptionText.text = market.description
         holder.coordinatesText.text = context.getString(R.string.market_coordinates_format, market.lat.toString(), market.lng.toString())
+        val imageUri = market.imageUri?.let { Uri.parse(it) }
+
+        if (imageUri != null) {
+            holder.marketImage.setImageURI(imageUri)
+        } else {
+            holder.marketImage.setImageResource(android.R.drawable.ic_menu_gallery)
+        }
 
         holder.itemView.setOnClickListener{
             Timber.d("Row tapped id=${market.id}")
