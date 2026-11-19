@@ -38,6 +38,13 @@
     <string name="change_photo">Change Photo</string>
     <string name="market_photo">Market photo</string>
 
+    <!-- Map picker -->
+    <string name="pick_location">Pick Location</string>
+    <string name="map_picker_title">Choose Location</string>
+    <string name="use_this_location">Use This Location</string>
+    <string name="selected_location">Selected location</string>
+    <string name="tap_map_first">Tap the map to choose a location</string>
+
     <!-- Messages -->
     <string name="error_name_required">Name is required</string>
     <string name="error_invalid_number">Enter a valid number</string>
