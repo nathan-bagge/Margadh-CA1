@@ -21,6 +21,10 @@ import timber.log.Timber
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import android.content.Intent
+import android.net.Uri
+import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
 
 class AddEditActivity : AppCompatActivity() {
 
@@ -31,6 +35,9 @@ class AddEditActivity : AppCompatActivity() {
     private lateinit var descriptionInput: EditText
     private lateinit var latInput: EditText
     private lateinit var lngInput: EditText
+    private lateinit var marketImage: ImageView
+    private lateinit var photoButton: Button
+    private var selectedImageUri: Uri? = null
 
     private var editingId: Long = -1L
 
@@ -55,6 +62,30 @@ class AddEditActivity : AppCompatActivity() {
         descriptionInput = findViewById(R.id.descriptionInput)
         latInput = findViewById(R.id.latInput)
         lngInput = findViewById(R.id.lngInput)
+        marketImage = findViewById(R.id.marketImage)
+        photoButton = findViewById(R.id.photoButton)
+
+        val imagePicker =
+            registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+                if (uri != null) {
+                    try {
+                        contentResolver.takePersistableUriPermission(
+                            uri,
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        )
+                    } catch (_: SecurityException) {
+                        Timber.w("Persistable permission not granted for $uri")
+                    }
+                    selectedImageUri = uri
+                    marketImage.setImageURI(uri)
+                    photoButton.setText(R.string.change_photo)
+                    Timber.i("Photo picked: $uri")
+                }
+            }
+
+        photoButton.setOnClickListener {
+            imagePicker.launch(arrayOf("image/*"))
+        }
 
         findViewById<Button>(R.id.saveButton).setOnClickListener { saveMarket() }
 
