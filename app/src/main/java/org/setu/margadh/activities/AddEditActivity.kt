@@ -100,7 +100,7 @@ class AddEditActivity : AppCompatActivity() {
 
             val lat = latInput.text.toString().toDoubleOrNull()
             val lng = lngInput.text.toString().toDoubleOrNull()
-            if (lat != null && lng != null) {
+            if (lat != null && lng != null && lat in -90.0..90.0 && lng in -180.0..180.0) {
                 intent.putExtra("lat", lat).putExtra("lng", lng)
             }
 
@@ -192,6 +192,18 @@ class AddEditActivity : AppCompatActivity() {
         if (lng == null) {
             Timber.w("Save blocked: invalid lng")
             lngInput.error = getString(R.string.error_invalid_number)
+            return
+        }
+
+        if (lat !in -90.0..90.0) {
+            Timber.w("Save blocked: lat out of range")
+            latInput.error = getString(R.string.error_lat_range)
+            return
+        }
+
+        if (lng !in -180.0..180.0) {
+            Timber.w("Save blocked: lng out of range")
+            lngInput.error = getString(R.string.error_lng_range)
             return
         }
 
