@@ -83,6 +83,30 @@ class AddEditActivity : AppCompatActivity() {
                 }
             }
 
+        val mapPicker =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    val data = result.data ?: return@registerForActivityResult
+                    latInput.setText(data.getDoubleExtra("lat", 0.0).toString())
+                    lngInput.setText(data.getDoubleExtra("lng", 0.0).toString())
+                    Timber.i("Location set from map")
+                }
+            }
+
+        findViewById<Button>(R.id.locationButton).setOnClickListener {
+            val intent = Intent(this, MapPickerActivity::class.java)
+                .putExtra("id", editingId)
+                .putExtra("name", nameInput.text.toString().trim())
+
+            val lat = latInput.text.toString().toDoubleOrNull()
+            val lng = lngInput.text.toString().toDoubleOrNull()
+            if (lat != null && lng != null && lat in -90.0..90.0 && lng in -180.0..180.0) {
+                intent.putExtra("lat", lat).putExtra("lng", lng)
+            }
+
+            mapPicker.launch(intent)
+        }
+
         photoButton.setOnClickListener {
             imagePicker.launch(arrayOf("image/*"))
         }
@@ -168,6 +192,18 @@ class AddEditActivity : AppCompatActivity() {
         if (lng == null) {
             Timber.w("Save blocked: invalid lng")
             lngInput.error = getString(R.string.error_invalid_number)
+            return
+        }
+
+        if (lat !in -90.0..90.0) {
+            Timber.w("Save blocked: lat out of range")
+            latInput.error = getString(R.string.error_lat_range)
+            return
+        }
+
+        if (lng !in -180.0..180.0) {
+            Timber.w("Save blocked: lng out of range")
+            lngInput.error = getString(R.string.error_lng_range)
             return
         }
 
