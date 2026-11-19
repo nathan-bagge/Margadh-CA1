@@ -147,6 +147,12 @@
                 android:inputType="number|numberDecimal|numberSigned" />
 
             <Button
+                android:id="@+id/locationButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/pick_location" />
+
+            <Button
                 android:id="@+id/saveButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

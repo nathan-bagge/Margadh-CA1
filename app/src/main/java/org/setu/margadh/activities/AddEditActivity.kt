@@ -83,6 +83,30 @@ class AddEditActivity : AppCompatActivity() {
                 }
             }
 
+        val mapPicker =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    val data = result.data ?: return@registerForActivityResult
+                    latInput.setText(data.getDoubleExtra("lat", 0.0).toString())
+                    lngInput.setText(data.getDoubleExtra("lng", 0.0).toString())
+                    Timber.i("Location set from map")
+                }
+            }
+
+        findViewById<Button>(R.id.locationButton).setOnClickListener {
+            val intent = Intent(this, MapPickerActivity::class.java)
+                .putExtra("id", editingId)
+                .putExtra("name", nameInput.text.toString().trim())
+
+            val lat = latInput.text.toString().toDoubleOrNull()
+            val lng = lngInput.text.toString().toDoubleOrNull()
+            if (lat != null && lng != null) {
+                intent.putExtra("lat", lat).putExtra("lng", lng)
+            }
+
+            mapPicker.launch(intent)
+        }
+
         photoButton.setOnClickListener {
             imagePicker.launch(arrayOf("image/*"))
         }
