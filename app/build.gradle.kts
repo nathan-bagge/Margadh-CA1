@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.timber)
     implementation(libs.gson)
+    implementation(libs.osmdroid.android)
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
