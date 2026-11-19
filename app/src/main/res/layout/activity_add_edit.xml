@@ -114,6 +114,22 @@
                 android:inputType="text|textMultiLine"
                 android:minLines="3" />
 
+            <ImageView
+                android:id="@+id/marketImage"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_marginTop="8dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/market_photo"
+                android:scaleType="centerCrop"
+                android:src="@android:drawable/ic_menu_gallery" />
+
+            <Button
+                android:id="@+id/photoButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_photo" />
+
             <EditText
                 android:id="@+id/latInput"
                 android:layout_width="match_parent"

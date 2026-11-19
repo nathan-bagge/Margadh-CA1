@@ -52,6 +52,7 @@ class MarketJSONStore(context: Context) : MarketStore {
         found.openingHours = market.openingHours
         found.lat = market.lat
         found.lng = market.lng
+        found.imageUri = market.imageUri
         serialize()
         return true
     }

@@ -8,5 +8,6 @@ data class MarketModel(
     var openingDays: String = "",
     var openingHours: String = "",
     var lat: Double = 0.0,
-    var lng: Double = 0.0
+    var lng: Double = 0.0,
+    var imageUri: String? = null
 )
