@@ -46,6 +46,7 @@ class MarketMapActivity : AppCompatActivity() {
 
         setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.setTitle(R.string.market_map)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         map = findViewById(R.id.marketMap)
         nameText = findViewById(R.id.mapNameText)
@@ -105,6 +106,11 @@ class MarketMapActivity : AppCompatActivity() {
         }
 
         Timber.i("Selected market id=${market.id} on map")
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
     }
 
     override fun onResume() {
