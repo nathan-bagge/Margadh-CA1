@@ -45,6 +45,11 @@
     <string name="selected_location">Selected location</string>
     <string name="tap_map_first">Tap the map to choose a location</string>
 
+    <!-- Market map -->
+    <string name="market_map">Market Map</string>
+    <string name="tap_marker_hint">Tap a market on the map to see its details</string>
+    <string name="no_markets">No markets saved yet</string>
+
     <!-- Messages -->
     <string name="error_name_required">Name is required</string>
     <string name="error_invalid_number">Enter a valid number</string>

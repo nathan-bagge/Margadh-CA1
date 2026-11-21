@@ -40,5 +40,13 @@
             android:layout_marginTop="16dp"
             android:text="@string/add_market"
             android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/marketMapButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/market_map"
+            android:textSize="24sp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
