@@ -57,7 +57,7 @@ class MarketListActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         // Use the layout's MaterialToolbar as the app bar "Set up the app bar"
-        setSupportActionBar(findViewById(R.id.toolbar))
+        setSupportActionBar(findViewById(R.id.main))
         supportActionBar?.setTitle(R.string.markets_title)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
