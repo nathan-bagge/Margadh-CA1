@@ -44,7 +44,7 @@ class MapPickerActivity : AppCompatActivity() {
             insets
         }
 
-        setSupportActionBar(findViewById(R.id.main))
+        setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.setTitle(R.string.map_picker_title)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 

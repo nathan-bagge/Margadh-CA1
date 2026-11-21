@@ -64,6 +64,14 @@ class MarketMapActivity : AppCompatActivity() {
     private fun loadMarkers() {
         val markets = AppData.markets.findAll()
 
+        if (markets.isEmpty()){
+            map.controller.setZoom(7.0)
+            map.controller.setCenter(GeoPoint(53.4, -7.9))
+            nameText.setText(R.string.no_markets)
+            Timber.i("Market Map: no markets to show")
+            return
+        }
+
         markets.forEach { market ->
             val marker = Marker(map)
             marker.position = GeoPoint(market.lat, market.lng)

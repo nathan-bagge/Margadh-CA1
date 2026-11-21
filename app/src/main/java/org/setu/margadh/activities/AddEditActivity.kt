@@ -51,7 +51,7 @@ class AddEditActivity : AppCompatActivity() {
             insets
         }
 
-        setSupportActionBar(findViewById(R.id.main))
+        setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.setTitle(R.string.add_market)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
