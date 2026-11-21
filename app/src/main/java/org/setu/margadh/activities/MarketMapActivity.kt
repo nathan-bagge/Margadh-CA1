@@ -1,8 +1,11 @@
 //References:
 //- OpenStreetMap, Tile usage policy: https://operations.osmfoundation.org/policies/tiles/
-//- osmdroid BoundingBox API: https://javadoc.io/static/org.osmdroid/osmdroid-android/6.0.0/org/osmdroid/util/BoundingBox.html
+//- osmdroid BoundingBox API (fromGeoPoints): https://javadoc.io/doc/org.osmdroid/osmdroid-android/6.1.20/org/osmdroid/util/BoundingBox.html
 //- Stack Overflow, fit all markers with zoomToBoundingBox: https://stackoverflow.com/questions/41489668
-//- Stack Overflow, zooming before the map is laid out: https://stackoverflow.com/questions/20608590
+//- Stack Overflow, zoomToBoundingBox only works once the map has a size: https://stackoverflow.com/questions/20608590
+//- Android Developers, View.post(): https://developer.android.com/reference/android/view/View#post(java.lang.Runnable)
+//- Android Developers, View visibility (VISIBLE / GONE): https://developer.android.com/reference/android/view/View#setVisibility(int)
+//- Android Developers, Activity lifecycle (refreshing in onResume): https://developer.android.com/guide/components/activities/activity-lifecycle
 
 package org.setu.margadh.activities
 
@@ -25,6 +28,9 @@ import org.setu.margadh.R
 import org.setu.margadh.models.MarketModel
 import timber.log.Timber
 import org.osmdroid.util.BoundingBox
+import android.content.Intent
+import android.view.View
+import android.widget.Button
 
 class MarketMapActivity : AppCompatActivity() {
 
@@ -33,6 +39,8 @@ class MarketMapActivity : AppCompatActivity() {
     private lateinit var detailsText: TextView
     private lateinit var descriptionText: TextView
     private lateinit var marketImage: ImageView
+    private lateinit var editButton: Button
+    private var selectedMarket: MarketModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,12 +65,19 @@ class MarketMapActivity : AppCompatActivity() {
         detailsText = findViewById(R.id.mapDetailsText)
         descriptionText = findViewById(R.id.mapDescriptionText)
         marketImage = findViewById(R.id.mapImage)
+        editButton = findViewById(R.id.mapEditButton)
+
+        editButton.setOnClickListener {
+            selectedMarket?.let { market ->
+                Timber.i("Edit market id=${market.id} from map")
+                startActivity(Intent(this, AddEditActivity::class.java).putExtra("id", market.id))
+            }
+        }
 
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.setMultiTouchControls(true)
         map.overlays.add(CopyrightOverlay(this))
 
-        loadMarkers()
     }
 
     private fun loadMarkers() {
@@ -110,6 +125,9 @@ class MarketMapActivity : AppCompatActivity() {
     }
 
     private fun showMarket(market: MarketModel) {
+        selectedMarket = market
+        editButton.visibility = View.VISIBLE
+
         nameText.text = market.name
         detailsText.text = getString(
             R.string.market_details_format,
@@ -135,6 +153,14 @@ class MarketMapActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         map.onResume()
+
+        // Rebuild the markers each time the screen comes back, so edits show straight away
+        map.overlays.clear()
+        map.overlays.add(CopyrightOverlay(this))
+        loadMarkers()
+
+        // Refresh the panel with the edited market's latest details
+        selectedMarket?.let { AppData.markets.findOne(it.id) }?.let { showMarket(it) }
     }
 
     override fun onPause() {
