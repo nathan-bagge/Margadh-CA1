@@ -1,5 +1,8 @@
 //References:
 //- OpenStreetMap, Tile usage policy: https://operations.osmfoundation.org/policies/tiles/
+//- osmdroid BoundingBox API: https://javadoc.io/static/org.osmdroid/osmdroid-android/6.0.0/org/osmdroid/util/BoundingBox.html
+//- Stack Overflow, fit all markers with zoomToBoundingBox: https://stackoverflow.com/questions/41489668
+//- Stack Overflow, zooming before the map is laid out: https://stackoverflow.com/questions/20608590
 
 package org.setu.margadh.activities
 
@@ -21,6 +24,7 @@ import org.setu.margadh.AppData
 import org.setu.margadh.R
 import org.setu.margadh.models.MarketModel
 import timber.log.Timber
+import org.osmdroid.util.BoundingBox
 
 class MarketMapActivity : AppCompatActivity() {
 
@@ -88,10 +92,17 @@ class MarketMapActivity : AppCompatActivity() {
             map.overlays.add(marker)
         }
 
-        // Centre on the first market
-        markets.firstOrNull()?.let { first ->
-            map.controller.setZoom(12.0)
-            map.controller.setCenter(GeoPoint(first.lat, first.lng))
+// Zoom so every market fits on screen
+        val points = markets.map { GeoPoint(it.lat, it.lng) }
+
+        if (points.size == 1) {
+            // A single point has no area to fit, so just centre on it
+            map.controller.setZoom(14.0)
+            map.controller.setCenter(points.first())
+        } else {
+            val box = BoundingBox.fromGeoPoints(points)
+            // post{} waits until the map has been laid out, before that it has no size to fit the box into
+            map.post { map.zoomToBoundingBox(box, false, 100) }
         }
 
         map.invalidate()
