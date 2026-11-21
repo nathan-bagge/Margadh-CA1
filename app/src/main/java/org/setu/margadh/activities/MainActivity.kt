@@ -31,5 +31,10 @@ class MainActivity : AppCompatActivity() {
             Timber.i("Add Market clicked")
             startActivity(Intent(this, AddEditActivity::class.java))
         }
+
+        findViewById<Button>(R.id.marketMapButton).setOnClickListener {
+            Timber.i("Market Map clicked")
+            startActivity(Intent(this, MarketMapActivity::class.java))
+        }
     }
 }
